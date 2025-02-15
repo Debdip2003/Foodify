@@ -2,8 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { FaTimes } from "react-icons/fa";
 import CartTotal from "./CartTotal";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const { currency, products, cartItems, updateQuantity } =
     useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
@@ -83,7 +85,10 @@ const Cart = () => {
       <CartTotal />
       {cartData.length > 0 && (
         <div className="flex justify-end mt-8">
-          <button className="bg-black text-white px-8 py-3 rounded-md hover:bg-gray-900 transition">
+          <button
+            className="bg-green-500 text-black px-8 py-3 rounded-md hover:bg-green-600 transition duration-300"
+            onClick={() => navigate("/placeorder")}
+          >
             PROCEED TO CHECKOUT
           </button>
         </div>

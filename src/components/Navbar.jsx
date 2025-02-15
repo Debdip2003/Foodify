@@ -37,9 +37,13 @@ const Navbar = () => {
           <FaUserCircle className="text-gray-700 text-xl cursor-pointer" />
           <div className="group-hover:block hidden absolute right-0 pt-4">
             <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow-md">
-              <p className="cursor-pointer hover:text-black">Orders</p>
-              <p className="cursor-pointer hover:text-black">Signup</p>
-              <p className="cursor-pointer hover:text-black">Login</p>
+              <Link to={"/profile"}>
+                <p className="cursor-pointer hover:text-black">Profile</p>
+              </Link>
+              <Link to={"/signin_login"}>
+                {" "}
+                <p className="cursor-pointer hover:text-black">Signup/Login</p>
+              </Link>
             </div>
           </div>
         </div>

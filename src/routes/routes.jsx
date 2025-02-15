@@ -8,6 +8,9 @@ import Offers from "../pages/Offers";
 import Wishlist from "../pages/Wishlist";
 import Product from "../pages/Product";
 import Cart from "../components/Cart";
+import PlaceOrder from "../pages/PlaceOrder";
+import Signin_Login from "../pages/Signin_Login";
+import Profile from "../pages/Profile";
 
 const routes = createBrowserRouter([
   {
@@ -19,6 +22,9 @@ const routes = createBrowserRouter([
       { path: "offers", element: <Offers /> },
       { path: "wishlist", element: <Wishlist /> },
       { path: "cart", element: <Cart /> },
+      { path: "placeorder", element: <PlaceOrder /> },
+      { path: "signin_login", element: <Signin_Login /> },
+      { path: "profile", element: <Profile /> },
       { path: "product/:productId", element: <Product /> },
     ],
   },

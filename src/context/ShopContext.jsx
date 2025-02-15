@@ -7,7 +7,7 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
   const currency = "$";
   const delivery_fee = 10;
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (itemId, count) => {
     setCartItems((prev) => ({
@@ -29,15 +29,29 @@ const ShopContextProvider = (props) => {
   };
 
   const getCartAmount = () => {
+    if (!products.length) return 0;
+
     const amount = Object.entries(cartItems).reduce(
       (total, [itemId, quantity]) => {
         const item = products.find(
-          (product) => product.id === parseInt(itemId)
+          (product) => String(product.id) === String(itemId)
         );
-        return total + (item ? item.price * quantity : 0);
+
+        if (!item) {
+          console.warn(`Product not found for ID: ${itemId}`);
+          return total;
+        }
+
+        const itemTotal = item.price * quantity;
+        console.log(
+          `Item ID: ${itemId}, Quantity: ${quantity}, Item Price: ${item.price}, Item Total: ${itemTotal}`
+        );
+
+        return total + itemTotal;
       },
       0
     );
+
     console.log("Cart amount:", amount);
     return amount;
   };

@@ -6,8 +6,8 @@ const footerData = {
     { label: "Wishlist", link: "/wishlist" },
   ],
   Community: [
-    { label: "For Artist", link: "#" },
-    { label: "Developer", link: "#" },
+    { label: "Branches", link: "#" },
+    { label: "Timings", link: "#" },
     { label: "Ads", link: "#" },
     { label: "Investor", link: "#" },
     { label: "Vendor", link: "#" },
