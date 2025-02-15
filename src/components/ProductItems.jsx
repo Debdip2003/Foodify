@@ -3,8 +3,9 @@ import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const ProductItems = ({ id, image, name, price }) => {
+const ProductItems = ({ id, image, name, price, category }) => {
   const { currency } = useContext(ShopContext);
+  console.log(category);
 
   return (
     <Link
@@ -22,6 +23,16 @@ const ProductItems = ({ id, image, name, price }) => {
 
       {/* Product Info */}
       <div className="p-4">
+        <div className="flex gap-2 justify-start items-center mb-4">
+          <p
+            className={`h-4 w-4 rounded-full ${
+              category?.trim().toLowerCase() === "veg"
+                ? "bg-green-500"
+                : "bg-red-500"
+            }`}
+          ></p>
+          <span className="text-sm text-gray-700">{category}</span>
+        </div>
         <p className="text-gray-800 font-semibold text-lg truncate">{name}</p>
         <p className="text-green-600 font-bold text-md">
           {currency}
@@ -40,4 +51,5 @@ ProductItems.propTypes = {
   image: PropTypes.arrayOf(PropTypes.string).isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  category: PropTypes.string.isRequired,
 };

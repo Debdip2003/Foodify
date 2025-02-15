@@ -1,120 +1,113 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import ShopContext from "./context/ShopContext";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ShopContext } from "../context/ShopContext";
+import { FaClock, FaLocationArrow } from "react-icons/fa";
+import { IconButton } from "@mui/material";
+import { Add, Remove, Favorite, ArrowBack } from "@mui/icons-material";
+import Footer from "../components/Footer";
+import Loader from "../components/Loader";
 
 const Product = () => {
   const { productId } = useParams();
   const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
-  const [size, setSize] = useState("");
+  const [count, setCount] = useState(1);
+  const navigate = useNavigate();
 
-  const fetchProductData = useCallback(() => {
-    const item = products.find((item) => item._id === productId);
-    if (item) {
-      setProductData(item);
-      setImage(item.image[0]);
+  useEffect(() => {
+    if (products.length > 0) {
+      const item = products.find((item) => item._id === productId);
+      if (item) {
+        setProductData(item);
+        setImage(item.image[0]);
+      }
     }
   }, [products, productId]);
 
-  useEffect(() => {
-    fetchProductData();
-  }, [fetchProductData]);
-
   if (!productData) {
-    return <div className="opacity-0">Loading...</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Loader />
+      </div>
+    );
   }
 
-  return productData ? (
-    <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
-      {/* Product Data */}
-      <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
-        {/* Product Images */}
-        <div className="flex flex-1 flex-col-reverse gap-3 sm:flex-row">
-          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
-            {productData.image.map((item, index) => (
-              <img
-                src={item}
-                key={index}
-                alt="productImages"
-                className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
-                onClick={() => setImage(item)}
-              />
-            ))}
-          </div>
-          <div className="w-full sm:w-[80%]">
-            <img src={image} alt="productImage" className="w-full h-auto" />
-          </div>
+  return (
+    <div className="bg-gray-100 min-h-screen p-8">
+      <div className="container mx-auto grid grid-cols-2 gap-8">
+        {/* Product Image */}
+        <div>
+          <img
+            src={image}
+            alt={productData.name}
+            className="w-full h-auto object-cover rounded-xl"
+          />
         </div>
 
-        {/* Product Information */}
-        <div className="flex-1">
-          <h1 className="font-medium text-2xl mt-2">{productData.name}</h1>
+        {/* Product Details */}
+        <div>
+          {/* Back & Favorite Icons */}
+          <div className="flex justify-between mb-4">
+            <IconButton color="default">
+              <ArrowBack onClick={() => navigate(-1)} />
+            </IconButton>
+            <IconButton color="default">
+              <Favorite />
+            </IconButton>
+          </div>
 
-          <p className="mt-5 text-3xl font-medium">
-            {currency}
-            {productData.price}
+          <h1 className="text-3xl font-bold">{productData.name}</h1>
+          <p className="text-green-600 font-semibold text-2xl mt-2">
+            {currency} {productData.price}
           </p>
-          <p className="mt-5 text-gray-500 md:w-4/5">
+
+          {/* Quantity Control */}
+          <div className="flex items-center mt-4">
+            <IconButton
+              size="small"
+              onClick={() => setCount((prev) => (prev > 1 ? prev - 1 : 1))}
+            >
+              <Remove />
+            </IconButton>
+            <span className="mx-4 text-lg font-medium">{count}</span>
+            <IconButton
+              size="small"
+              onClick={() => setCount((prev) => prev + 1)}
+            >
+              <Add />
+            </IconButton>
+          </div>
+
+          {/* Product Description */}
+          <h3 className="font-semibold text-gray-700 mt-4">Description</h3>
+          <p className="text-gray-600 text-lg mt-2">
             {productData.description}
           </p>
-          <div className="flex flex-col gap-4 my-8">
-            <p>Select Size</p>
-            <div className="flex gap-2">
-              {productData.sizes.map((item, index) => (
-                <button
-                  className={`border py-2 px-4 bg-gray-100 ${
-                    item === size ? "border-orange-500" : ""
-                  }`}
-                  key={index}
-                  onClick={() => setSize(item)}
-                >
-                  {item}
-                </button>
-              ))}
+
+          {/* Additional Info (Location & Time) */}
+          <div className="mt-6 text-gray-600">
+            <div className="flex items-center gap-2">
+              <FaLocationArrow size={16} />
+              <span>236, Char Imly, Bhopal-462016</span>
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <FaClock size={16} />
+              <span>30 Min</span>
             </div>
           </div>
+
+          {/* Add to Cart Button */}
           <button
-            className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
-            onClick={() => {
-              addToCart(productData._id, size);
-            }}
+            className="mt-6 w-full bg-green-600 text-white text-lg py-3 rounded-lg hover:bg-green-700 transition hover:cursor-pointer"
+            onClick={() => addToCart(productData._id, count)}
           >
-            ADD TO CART
+            Add {count} to Cart - ₹ {productData.price * count}
           </button>
-          <hr className="mt-8 sm:w-4/5" />
-          <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
-            <p>100% Original Product</p>
-            <p>Cash on delivery is available on this product</p>
-            <p>Easy return and exchange policy within 7 days</p>
-          </div>
         </div>
       </div>
-      {/* Description and Review section */}
-      <div className="mt-20">
-        <div className="flex ">
-          <b className="border px-5 py-3 text-sm">Description</b>
-          <p className="border px-5 py-3 text-sm">Reviews (122)</p>
-        </div>
-        <div className="flex flex-col gap-4 border p-6 text-sm text-gray-500">
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex,
-            consequatur iste alias dicta eveniet itaque a distinctio aliquid
-            quasi earum nostrum aperiam quas, hic quam sint eaque eius eum
-            ratione.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas iusto
-            ipsam id? Est praesentium magnam recusandae ut beatae magni
-            consectetur! Harum, reiciendis quam iure laborum ipsa quo, nam
-            voluptatum necessitatibus architecto illum omnis fuga vel fugit
-            tempore labore officiis sunt?
-          </p>
-        </div>
-      </div>
+      <Footer />
     </div>
-  ) : (
-    <div className="opacity-0"></div>
   );
 };
 

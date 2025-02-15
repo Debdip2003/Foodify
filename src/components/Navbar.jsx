@@ -2,7 +2,7 @@ import NavbarData from "../data/NavbarData"; //import the navbar data
 //import from react icons
 import { IoSearch } from "react-icons/io5";
 import { FaUserCircle, FaShoppingCart } from "react-icons/fa";
-import { NavLink } from "react-router-dom"; //import from react-router-dom
+import { Link, NavLink } from "react-router-dom"; //import from react-router-dom
 
 const Navbar = () => {
   return (
@@ -45,7 +45,9 @@ const Navbar = () => {
         </div>
 
         <div className="relative cursor-pointer">
-          <FaShoppingCart className="text-gray-700 text-xl" />
+          <Link to={"/cart"}>
+            <FaShoppingCart className="text-gray-700 text-xl" />
+          </Link>
         </div>
       </div>
     </div>
