@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import foodbg from "../assets/foodbg.png";
+import foodBg from "..//assets/foodBg.png";
 
 const SigninLogin = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -11,9 +11,9 @@ const SigninLogin = () => {
         {/* Top Image */}
         <div className="flex justify-center mb-6">
           <img
-            src={foodbg}
+            src={foodBg}
             alt="Food Illustration"
-            className="rounded-lg w-full max-w-xs"
+            className="rounded-lg w-full "
           />
         </div>
 
